@@ -39,7 +39,7 @@ Sometimes files contain metadata before and/or after the actual data. Here, the 
 ### Writing a .csv
 Similar to `write_csv`, Pandas has a dedicated CSV writing function, [to_csv](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_csv.html). 
 
-#### Simple example
+#### Examples
 ```
 > df.head()
          fuel   em units         X1750         X1751  ...         X2013         X2014
@@ -66,7 +66,9 @@ The ability to slice, dice, and subset Pandas DataFrames is extremely useful, an
 ## `loc`
 `loc` is primarily label-based, meaning it operates best when given things like column names and/or row values. `loc` will raise a `KeyError` when items are not found in the given DataFrame.
 
-A simple example is as follows:
+### Examples
+
+We'll start off by creating a simple DataFrame:
 ```
 > import pandas as pd
 > df = pd.DataFrame([[1, 2], [4, 5], [7, 8]],
@@ -79,96 +81,216 @@ viper               4       5
 sidewinder          7       8
 ```
   
-### Getting Values
+#### Getting Values
 
-Given a single label, a row is returned as a [Series](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html):
-```
-> df.loc['viper']
-max_speed    4
-shield       5
-Name: viper, dtype: int64
-```
+* Given a single label, a row is returned as a [Series](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html):
+  ```
+  > df.loc['viper']
+  max_speed    4
+  shield       5
+  Name: viper, dtype: int64
+  ```
 
-Given a list of labels using `[[]]` returns a DataFrame:
-```
-> df.loc[['viper', 'cobra']]
-       max_speed  shield
-viper          4       5
-cobra          1       2
-```
+* Given a list of labels using `[[]]` returns a DataFrame:
+  ```
+  > df.loc[['viper', 'cobra']]
+         max_speed  shield
+  viper          4       5
+  cobra          1       2
+  ```
 
-The value of a specific row and column can be retrieved as such:
-```
->  df.loc['cobra', 'shield']
-2
-```
+* The value of a specific row and column can be retrieved as such:
+  ```
+  >  df.loc['cobra', 'shield']
+  2
+  ```
 
-Conditional that returns a boolean Series:
-```
-> df.loc[df['shield'] > 6]
-            max_speed  shield
-sidewinder          7       8
-```
+* Conditional that returns a boolean Series:
+  ```
+  > df.loc[df['shield'] > 6]
+              max_speed  shield
+  sidewinder          7       8
+  ```
 
-Conditional that returns a boolean Series with column labels specified:
-```
-> df.loc[df['shield'] > 6, ['max_speed']]
-            max_speed
-sidewinder          7
-```
+* Conditional that returns a boolean Series with column labels specified:
+  ```
+  > df.loc[df['shield'] > 6, ['max_speed']]
+              max_speed
+  sidewinder          7
+  ```
 
-Callable that returns a boolean Series:
-```
-> df.loc[lambda df: df['shield'] == 8]
-            max_speed  shield
-sidewinder          7       8
-```
+* Callable that returns a boolean Series:
+  ```
+  > df.loc[lambda df: df['shield'] == 8]
+              max_speed  shield
+  sidewinder          7       8
+  ```
 
-### Setting Values
+#### Setting Values
 
 In addition to retrieving values and objects from a DataFrame, `loc` can also be used to set values.
 
-Set value for all items matching the list of labels:
-```
-> df.loc[['viper', 'sidewinder'], ['shield']] = 50
-> df
-            max_speed  shield
-cobra               1       2
-viper               4      50
-sidewinder          7      50
-```
+* Set value for all items matching the list of labels:
+  ```
+  > df.loc[['viper', 'sidewinder'], ['shield']] = 50
+  > df
+              max_speed  shield
+  cobra               1       2
+  viper               4      50
+  sidewinder          7      50
+  ```
 
-Set the value of an entire row:
-```
-> df.loc['cobra'] = 10
-> df
-            max_speed  shield
-cobra              10      10
-viper               4      50
-sidewinder          7      50
-```
+* Set the value of an entire row:
+  ```
+  > df.loc['cobra'] = 10
+  > df
+              max_speed  shield
+  cobra              10      10
+  viper               4      50
+  sidewinder          7      50
+  ```
 
-Set the value of an entire column:
-```
-> df.loc[:, 'max_speed'] = 30
-> df
-            max_speed  shield
-cobra              30      10
-viper              30      50
-sidewinder         30      50
-```
+* Set the value of an entire column:
+  ```
+  > df.loc[:, 'max_speed'] = 30
+  > df
+              max_speed  shield
+  cobra              30      10
+  viper              30      50
+  sidewinder         30      50
+  ```
 
-Set value for rows matching callable condition:
-```
-> df.loc[df['shield'] > 35] = 0
-> df
-            max_speed  shield
-cobra              30      10
-viper               0       0
-sidewinder          0       0
-```
+* Set value for rows matching callable condition:
+  ```
+  > df.loc[df['shield'] > 35] = 0
+  > df
+              max_speed  shield
+  cobra              30      10
+  viper               0       0
+  sidewinder          0       0
+  ```
 
-More in-depth examples can be found in the [Pandas API reference](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html)
+More examples can be found in the [Pandas API reference](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html)
 
 ## `iloc`
-Unlike `loc`, which is primarily label-based, `iloc` is integer position based (from `0` to `length-1` of the axis). However, it may also be used with a boolean array. `iloc` will raise an `IndexError` if a requested indexer is out-of-bounds, except in the case of slice indexers, which allow out-of-bounds indexing. 
+Unlike `loc`, which is primarily label-based, `iloc` is integer position based (from `0` to `length-1` of the axis) and is used for selection by position. However, it may also be used with a boolean array. `iloc` will raise an `IndexError` if a requested indexer is out-of-bounds, except in the case of slice indexers, which allow out-of-bounds indexing. 
+
+### Examples
+
+We'll start off by creating a simple DataFrame from a dictionary:
+```
+> import pandas as pd
+> mydict = [{'a': 1, 'b': 2, 'c': 3, 'd': 4},
+...         {'a': 100, 'b': 200, 'c': 300, 'd': 400},
+...         {'a': 1000, 'b': 2000, 'c': 3000, 'd': 4000 }]
+> df = pd.DataFrame(mydict)
+> df
+      a     b     c     d
+0     1     2     3     4
+1   100   200   300   400
+2  1000  2000  3000  4000
+```
+
+#### Indexing just the rows
+
+* With a scalar integer:
+  ```
+  > type(df.iloc[0])
+  <class 'pandas.core.series.Series'>
+  > df.iloc[0]
+  a    1
+  b    2
+  c    3
+  d    4
+  Name: 0, dtype: int64
+  ```
+
+* With a list of integers:
+  ```
+  > df.iloc[[0]]
+     a  b  c  d
+  0  1  2  3  4
+  > type(df.iloc[[0]])
+  <class 'pandas.core.frame.DataFrame'>
+  ```
+
+  ```
+  > df.iloc[[0, 1]]
+       a    b    c    d
+  0    1    2    3    4
+  1  100  200  300  400
+  ```
+
+* With a *slice* object:
+  ```
+  > df.iloc[:3]
+        a     b     c     d
+  0     1     2     3     4
+  1   100   200   300   400
+  2  1000  2000  3000  4000
+  ```
+
+* With a boolean mask the same length as the index:
+  ```
+  > df.iloc[[True, False, True]]
+        a     b     c     d
+  0     1     2     3     4
+  2  1000  2000  3000  4000
+  ```
+
+* With a callable, useful in method chains. The x passed to the `lambda` is the DataFrame being sliced. This selects the rows whose index label even:
+  ```
+  > df.iloc[lambda x: x.index % 2 == 0]
+        a     b     c     d
+  0     1     2     3     4
+  2  1000  2000  3000  4000
+  ```
+
+#### Indexing both axes
+
+You can mix the indexer types for the index and columns. Use `:` to select the entire axis.
+
+* With scalar integers:
+  ```
+  > df
+        a     b     c     d
+  0     1     2     3     4
+  1   100   200   300   400
+  2  1000  2000  3000  4000
+  > df.iloc[0, 1]
+  2
+  ```
+
+* With lists of integers:
+  ```
+  > df.iloc[[0, 2], [1, 3]]
+        b     d
+  0     2     4
+  2  2000  4000
+  ```
+
+* With *slice* objects:
+  ```
+  > df.iloc[1:3, 0:3]
+        a     b     c
+  1   100   200   300
+  2  1000  2000  3000
+  ```
+
+* With a boolean array whose length matches the columns:
+  ```
+  > df.iloc[:, [True, False, True, False]]
+        a     c
+  0     1     3
+  1   100   300
+  2  1000  3000
+  ```
+
+* With a callable function that expects the Series or DataFrame:
+  ```
+  > df.iloc[:, lambda df: [0, 2]]
+        a     c
+  0     1     3
+  1   100   300
+  2  1000  3000
+  ```

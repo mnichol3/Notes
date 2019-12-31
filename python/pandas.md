@@ -66,7 +66,7 @@ The ability to slice, dice, and subset Pandas DataFrames is extremely useful, an
 ## `loc`
 `loc` is primarily label-based, meaning it operates best when given things like column names and/or row values. `loc` will raise a `KeyError` when items are not found in the given DataFrame.
 
-### Examples
+### Basic Examples
 
 We'll start off by creating a simple DataFrame:
 ```
@@ -172,10 +172,53 @@ In addition to retrieving values and objects from a DataFrame, `loc` can also be
 
 More examples can be found in the [Pandas API reference](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.loc.html)
 
+### Real-world Examples
+Below are some real-world examples that implement concepts described in the examples above, but tend to be a bit more complex.
+
+* CMIP6 Emissions Freeze
+  When setting the emission factors for various emission species for years >= 1970 to their 1970 value, `loc` was used to ensure the correct values were being changed for a given [CEDS](https://github.com/JGCRI/CEDS) iso, sector, and fuel. 
+  
+  Here is an example of the emission factor csv files being used:
+  
+  ```
+  > import pandas as pd
+  > fname = 'H.CO2_total_EFs_extended.csv'
+  > df = pd.read_csv(fname, sep=',', header=0)
+  > df
+         iso                         sector        fuel    units  X1750  ...  X2010  X2011  X2012  X2013  X2014
+  0      abw                  11A_Volcanoes     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  1      abw               11B_Forest-fires     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  2      abw              11C_Other-natural     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  3      abw  1A1a_Electricity-autoproducer     biomass    kt/kt    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  4      abw  1A1a_Electricity-autoproducer  brown_coal    kt/kt    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  ...    ...                            ...         ...      ...    ...  ...    ...    ...    ...    ...    ...
+  55207  zwe         5D_Wastewater-handling     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  55208  zwe        5E_Other-waste-handling     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  55209  zwe              6A_Other-in-total     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  55210  zwe          6B_Other-not-in-total     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  55211  zwe           7A_Fossil-fuel-fires     process  kt/1000    0.0  ...    0.0    0.0    0.0    0.0    0.0
+  ```
+  
+  We only want to overwrite combustion-related sectors. In order to do this, DataFrame rows were selected with very strict criteria. For this example, we will select France as the country, or `iso`, `1A2g_Ind-Comb-Construction` as the `sector`, and `brown_coal` as the `fuel`:
+  ```
+  > iso = `fra`
+  > sector = '1A2g_Ind-Comb-Construction'
+  > fuel = 'brown_coal'
+  ```
+  
+  Since `iso`, `sector`, and `fuel` are their own columns, the following snippet using `loc` finds the row we are interested in:
+  ```
+  > df.loc[(df['iso'] == iso) & (df['sector'] == sector) & (df['fuel'] == fuel)]
+         iso                      sector        fuel  units  ...     X2011     X2012     X2013     X2014
+  16263  fra  1A2g_Ind-Comb-Construction  brown_coal  kt/kt  ...  1.152316  1.152316  1.152316  1.152316
+
+  [1 rows x 269 columns]
+  ```
+
 ## `iloc`
 Unlike `loc`, which is primarily label-based, `iloc` is integer position based (from `0` to `length-1` of the axis) and is used for selection by position. However, it may also be used with a boolean array. `iloc` will raise an `IndexError` if a requested indexer is out-of-bounds, except in the case of slice indexers, which allow out-of-bounds indexing. 
 
-### Examples
+### Basic Examples
 
 We'll start off by creating a simple DataFrame from a dictionary:
 ```

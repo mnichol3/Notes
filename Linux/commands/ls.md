@@ -79,3 +79,6 @@ The `ls` command lists directory contents
   ```
   ls -l | grep '\.dat$' | wc -l
   ```
+
+## References
+* https://linux.die.net/man/1/ls

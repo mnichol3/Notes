@@ -71,3 +71,6 @@ The `mv` command is extremely useful, as it not only allows you to move files be
   
   Although `mv` is not a dedicated file renaming command, it is still able to rename files through its functionality. Essentially, the contents of `oldfile.txt` are moved into a *new* file, and that new file is then named `newfile.txt`. However, things become much more complicated when it comes to renaming multiple files with `mv`. I recommend a script or the `rename` command to handle renaming multiple files.
   
+
+## References
+* https://linux.die.net/man/1/mv

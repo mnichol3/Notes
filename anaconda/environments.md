@@ -82,3 +82,16 @@ conda create --name myclone --clone myenv
 ```
 
 
+## Exporting an environment
+
+### Exporting an environment's `.yml` file
+
+1. Activate the environment to export: `conda activate myenv`
+2. Export the active environment: `conda env export > environment.yml`
+
+
+## Removing an environment
+
+```
+conda remove --name myenv --all
+```

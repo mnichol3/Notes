@@ -5,9 +5,16 @@ Here are some useful Python packages available through the [Anaconda Cloud](http
 [NumPy](https://numpy.org/) is "*the fundamental package for scientific computing with Python*" and part of the [SciPy](https://www.scipy.org/) ecosystem. It includes functions for simple, as well as complex, mathematical operations on scalars, vectors, and matrices.
 
 ### Quick Installation
-NumPy is available through the [`conda-forge` channel](https://anaconda.org/conda-forge/numpy)
+NumPy is available through the Anaconda Cloud [`conda-forge` channel](https://anaconda.org/conda-forge/numpy)
 ```
 conda install -c conda-forge numpy
 ```
   
 ## SciPy
+[SciPy](https://www.scipy.org/) is *a Python-based ecosystem of open-source software for mathematics, science, and engineering* that includes [NumPy](https://numpy.org/), [SciPy Library](https://www.scipy.org/scipylib/index.html), [Matplotlib](https://matplotlib.org/), [IPython](http://ipython.org/), [SymPy](https://www.sympy.org/en/index.html), and [Pandas](https://pandas.pydata.org/) as core packages.
+
+### Quick Installation
+SciPy is available through the Anaconda Cloud [`conda-forge` channel](https://anaconda.org/conda-forge/scipy)
+```
+conda install -c conda-forge scipy
+```

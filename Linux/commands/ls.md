@@ -60,6 +60,11 @@ The `ls` command lists directory contents
   ls -d */
   ```
   
+* **List sudbirectories and files in current directory**
+  ```
+  ls -lR
+  ```
+  
 * **List 20 newest files in current directory**
   ```
   ls -ltr|tail -20

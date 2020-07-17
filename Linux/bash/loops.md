@@ -1,6 +1,6 @@
 Notes and examples of various loops from [tldp](https://tldp.org/LDP/abs/html/loops1.html)
 
-# Loops - *For* loop
+# *For* loop
 ## Basic structure
 ```bash
 for arg in list
@@ -140,6 +140,85 @@ do   # The comma concatenates operations.
 done
 
 echo; echo
+
+exit 0
+```
+
+
+
+# *While* loop
+## Basic structure
+```bash
+while [condition]
+do
+  command(s)
+done
+```
+
+## Example 1 - Simple *while* loop
+```bash
+#!/bin/bash
+
+var0=0
+LIMIT=10
+
+while [ "$var0" -lt "$LIMIT" ]
+#      ^                    ^
+# Spaces, because these are "test-brackets"
+do
+  echo -n "$var0 "         #  -n surpresses newline
+  #             ^             Space to separate out numbers.
+  
+  var0=`expr $var0 + 1`    #  var0=$(($var0+1))  also works.
+                           #  var0=$((var0 + 1)) also works.
+                           #  let "var0 += 1"    also works.
+                           #  Various other methods also work.
+ done
+ 
+ echo 
+ 
+ exit 0
+```
+
+
+## Example 2 - Another *while* loop
+```bash
+#!/bin/bash
+
+echo
+                                # Equivalent to:
+while [ "$var1" != "end" ]      #   while test "$var1" != "end"
+do
+  echo "Input variable #1 (end to exit) "
+  read var1                     # Note not "read $var1" (why?).
+  echo "variable #1 = $var1"    # Needs quotes because of "#"
+  # If input is 'end', echo it here.
+  # Does not test for termination condition until top of loop.
+  echo
+done
+
+exit 0
+```
+
+
+## Example 3 - *while* loop with multiple conditions
+```bash
+#!/bin/bash
+
+var1=unset
+pervious=$var1
+
+while echo "previous-variable = $previous"
+      echo
+      previous=$var1
+      [ "var1" != end ]  # Keeps track of what $var1 was previously.
+      # Four conditions on *while*, but only the final controls the loop.
+      # The *last* exit status is the one that counts.
+do
+echo "Input variable #1 (end to exit) "
+  read var1
+  echo "variable #1 = $var1"
+done
 
 exit 0
 ```

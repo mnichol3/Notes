@@ -98,7 +98,7 @@ done
 
 echo; echo
 
-# +=========================================+
+# +===========================================================================+
 
 # Using "seq" ...
 for a in `seq 10`
@@ -108,7 +108,7 @@ done
 
 echo; echo
 
-# +=========================================+
+# +===========================================================================+
 
 # Using brace expansion ...
 # Bash version 3+.
@@ -119,7 +119,7 @@ done
 
 echo; echo
 
-# +=========================================+
+# +===========================================================================+
 
 # Using C-like syntax ...
 LIMIT=10
@@ -131,7 +131,7 @@ done
 
 echo; echo
 
-# +=========================================+
+# +===========================================================================+
 
 # Using C "comma operator" to increment two variables simultaneously ...
 for ((a=1, b=1; a <= LIMIT ; a++, b++))
@@ -206,12 +206,12 @@ exit 0
 #!/bin/bash
 
 var1=unset
-pervious=$var1
+perv=$var1
 
-while echo "previous-variable = $previous"
+while echo "previous-variable = $prev"
       echo
-      previous=$var1
-      [ "var1" != end ]  # Keeps track of what $var1 was previously.
+      prev=$var1
+      [ "$var1" != end ]  # Keeps track of what $var1 was previously.
       # Four conditions on *while*, but only the final controls the loop.
       # The *last* exit status is the one that counts.
 do
@@ -219,6 +219,41 @@ echo "Input variable #1 (end to exit) "
   read var1
   echo "variable #1 = $var1"
 done
+
+exit 0
+```
+
+
+## Example 4 - C-style syntax in a *while* loop
+```bash
+#!/bin/bash
+# wh-loop.sh: Count to 10 in a 'while' loop.
+
+LIMIT=10
+i=1
+
+while [ "$i" -le $LIMIT ]
+do
+  echo -n "$i "
+  let "i+=1"
+done
+
+echo; echo
+
+# +===========================================================================+
+
+# Now, repeat with C-like syntax.
+
+((i = 1))
+# Double-parenthesis permit space when setting a variable, as in C.
+
+while (( i <= LIMIT ))     #  Double-parenthesis,
+do                         #+ and no "$" preceding variables.
+  echo -n "$i "
+  ((i += 1))
+done
+
+echo
 
 exit 0
 ```

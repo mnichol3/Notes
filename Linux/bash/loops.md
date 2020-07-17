@@ -47,3 +47,99 @@ do
   
   exit 0
 ```
+
+
+## Example 3 - Operating on a file list contained in a variable
+```bash
+#!/bin/bash
+# fileinfo.sh
+
+FILES="/usr/sbin/accept
+/usr/sbin/pwck
+/usr/sbin/chroot
+/usr/bin/fakefile
+/sbin/badblocks
+/sbin/ypbind"       # List of files you are curious about.
+                    # Threw in a dummy file, /usr/bin/fakefile
+                    
+echo
+
+for file in $FILES
+do
+  if [ ! -e "$file" ]         #  Check if file exists
+  then
+    echo "$file does not exist."; echo
+    continue
+  fi                          # On to the next file.
+  
+  ls -l $file | awk '{ print $8 "     file size: " $5 }'  # Print 2 fields.
+  whatis `basename $file`     # File info.
+  #  Note that the whatis database needs to have been set up for this to work.
+  #  To do this, run /usr/bin/makewhatis as root.
+  echo
+done
+
+exit 0
+```
+
+
+## Example 4 - Multiple ways to count to 10
+```bash
+#!/bin/bash
+# Lets count to 10
+
+echo 
+
+# Standatd syntax ...
+for a in 1 2 3 4 5 6 7 8 9 10
+do
+  echo -n "$a "
+done
+
+echo; echo
+
+# +=========================================+
+
+# Using "seq" ...
+for a in `seq 10`
+do
+  echo -n "$a "
+done
+
+echo; echo
+
+# +=========================================+
+
+# Using brace expansion ...
+# Bash version 3+.
+for a in {1..10}
+do
+  echo -n "$a "
+done
+
+echo; echo
+
+# +=========================================+
+
+# Using C-like syntax ...
+LIMIT=10
+
+for ((a=1; a <= LIMIT ; a++))        # Double parenthesis, and naked "LIMIT"
+do
+  echo -n "$a "
+done
+
+echo; echo
+
+# +=========================================+
+
+# Using C "comma operator" to increment two variables simultaneously ...
+for ((a=1, b=1; a <= LIMIT ; a++, b++))
+do   # The comma concatenates operations.
+  echo -n "$a-$b "
+done
+
+echo; echo
+
+exit 0
+```
